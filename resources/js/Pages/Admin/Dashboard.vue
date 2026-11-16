@@ -84,10 +84,6 @@ function calculateStatusPercentage(count) {
 
       <!-- Right: Date & Filter Badge -->
       <div class="flex items-center gap-2.5 self-start md:self-auto">
-        <div class="inline-flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-white border border-slate-200/70 shadow-2xs text-xs font-semibold text-slate-600">
-          <span class="text-teal-500">📅</span>
-          <span>{{ todayFormatted }}</span>
-        </div>
       </div>
     </div>
 

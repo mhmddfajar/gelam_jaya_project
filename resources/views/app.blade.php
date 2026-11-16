@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title inertia>{{ config('app.name', 'Desa Gelam Jaya') }}</title>
+        <link rel="icon" type="image/webp" href="/images/logo.webp" />
 
         <!-- Scripts & Styles -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])

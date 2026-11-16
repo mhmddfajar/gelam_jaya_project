@@ -61,6 +61,13 @@ function getPotentialIcon(category) {
         <div class="absolute -top-24 -left-24 w-96 h-96 bg-teal-400/10 rounded-full blur-3xl pointer-events-none"></div>
         <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-cyan-400/10 rounded-full blur-3xl pointer-events-none"></div>
 
+        <!-- Watermark Logo Desa -->
+        <img
+          src="/images/logo.webp"
+          class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-72 md:w-96 opacity-[0.07] mix-blend-multiply pointer-events-none select-none"
+          alt="Watermark Logo Desa"
+        />
+
         <div class="relative z-10 max-w-4xl mx-auto space-y-6">
           <div>
             <p class="text-sm md:text-base font-semibold text-teal-600 tracking-wide uppercase mb-2">

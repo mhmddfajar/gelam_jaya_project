@@ -15,6 +15,28 @@ defineProps({
     default: false,
   },
 });
+
+function cleanPaginationLabel(label) {
+  if (!label) return '';
+  const str = String(label).toLowerCase();
+  if (
+    str.includes('previous') ||
+    str.includes('&laquo;') ||
+    str.includes('«') ||
+    str.includes('sebelumnya')
+  ) {
+    return '&lt;';
+  }
+  if (
+    str.includes('next') ||
+    str.includes('&raquo;') ||
+    str.includes('»') ||
+    str.includes('berikutnya')
+  ) {
+    return '&gt;';
+  }
+  return label;
+}
 </script>
 
 <template>
@@ -51,14 +73,14 @@ defineProps({
           <Link
             v-if="link.url"
             :href="link.url"
-            class="px-3 py-1.5 rounded-xl text-xs font-semibold transition"
+            class="min-w-8 h-8 px-2.5 rounded-xl text-xs font-semibold transition flex items-center justify-center"
             :class="link.active ? 'bg-teal-600 text-white shadow-2xs font-bold' : 'bg-white border border-slate-200/80 text-slate-600 hover:text-slate-900 hover:bg-slate-50'"
-            v-html="link.label"
+            v-html="cleanPaginationLabel(link.label)"
           />
           <span
             v-else
-            class="px-3 py-1.5 text-xs text-slate-300 select-none"
-            v-html="link.label"
+            class="min-w-8 h-8 px-2.5 rounded-xl text-xs text-slate-300 select-none flex items-center justify-center font-medium"
+            v-html="cleanPaginationLabel(link.label)"
           />
         </template>
       </div>

@@ -26,9 +26,11 @@ const panelRoute = computed(() => {
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <!-- Logo & Branding -->
         <Link href="/" class="flex items-center gap-3 group" @click="mobileMenuOpen = false">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-600 to-emerald-600 text-white flex items-center justify-center font-black text-base shadow-sm shadow-teal-600/20 group-hover:scale-105 transition-transform duration-300">
-            GJ
-          </div>
+          <img
+            src="/images/logo.webp"
+            alt="Logo Desa Gelam Jaya"
+            class="w-10 h-10 object-contain group-hover:scale-105 transition-transform duration-300"
+          />
           <div>
             <div class="flex items-center gap-1.5">
               <span class="font-extrabold text-base sm:text-lg text-slate-900 tracking-tight group-hover:text-teal-700 transition">
@@ -273,9 +275,11 @@ const panelRoute = computed(() => {
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           <div class="md:col-span-2 space-y-3">
             <div class="flex items-center gap-2.5">
-              <div class="w-8 h-8 rounded-lg bg-teal-600 text-white flex items-center justify-center font-black text-sm">
-                GJ
-              </div>
+              <img
+                src="/images/logo.webp"
+                alt="Logo Desa Gelam Jaya"
+                class="w-8 h-8 object-contain"
+              />
               <span class="font-extrabold text-slate-900 text-base">Pemerintah Desa Gelam Jaya</span>
             </div>
             <p class="text-xs text-slate-500 leading-relaxed max-w-md">

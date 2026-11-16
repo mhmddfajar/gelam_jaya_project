@@ -7,6 +7,13 @@ const page = usePage();
 const user = computed(() => page.props.auth?.user);
 
 const sidebarOpen = ref(false);
+
+const todayFormatted = new Intl.DateTimeFormat('id-ID', {
+  weekday: 'long',
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+}).format(new Date());
 </script>
 
 <template>
@@ -16,9 +23,11 @@ const sidebarOpen = ref(false);
     <!-- Mobile Topbar -->
     <div class="md:hidden bg-white border-b border-slate-200/80 px-4 py-3 flex items-center justify-between sticky top-0 z-40 shadow-xs">
       <div class="flex items-center gap-2.5">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-teal-600 to-cyan-500 text-white font-extrabold flex items-center justify-center text-sm shadow-sm">
-          GJ
-        </div>
+        <img
+          src="/images/logo.webp"
+          alt="Logo Desa Gelam Jaya"
+          class="w-9 h-9 object-contain"
+        />
         <div>
           <span class="font-bold text-sm text-slate-900 tracking-tight block leading-none">Desa Gelam Jaya</span>
           <span class="text-[10px] font-semibold text-teal-600">Admin Panel</span>
@@ -43,9 +52,11 @@ const sidebarOpen = ref(false);
       <!-- Brand Header -->
       <div class="h-16 flex items-center justify-between px-6 border-b border-slate-100">
         <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-teal-600 to-cyan-500 text-white font-extrabold flex items-center justify-center text-sm shadow-xs">
-            GJ
-          </div>
+          <img
+            src="/images/logo.webp"
+            alt="Logo Desa Gelam Jaya"
+            class="w-9 h-9 object-contain"
+          />
           <div>
             <h1 class="font-bold text-sm text-slate-900 leading-tight tracking-tight">Desa Gelam Jaya</h1>
             <p class="text-[11px] text-teal-600 font-semibold tracking-wide">Panel Administrator</p>
@@ -75,8 +86,8 @@ const sidebarOpen = ref(false);
           href="/admin/dashboard"
           class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all"
           :class="$page.url.startsWith('/admin/dashboard')
-            ? 'bg-teal-50 text-teal-700 font-bold border-l-4 border-teal-600 shadow-xs'
-            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'"
+            ? 'bg-teal-50 text-teal-800 font-semibold border border-teal-200/70 shadow-2xs'
+            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 border border-transparent'"
         >
           <span class="text-base">📊</span>
           <span>Dashboard</span>
@@ -86,8 +97,8 @@ const sidebarOpen = ref(false);
           href="/admin/pengguna"
           class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all"
           :class="$page.url.startsWith('/admin/pengguna')
-            ? 'bg-teal-50 text-teal-700 font-bold border-l-4 border-teal-600 shadow-xs'
-            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'"
+            ? 'bg-teal-50 text-teal-800 font-semibold border border-teal-200/70 shadow-2xs'
+            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 border border-transparent'"
         >
           <span class="text-base">👥</span>
           <span>Kelola Pengguna</span>
@@ -101,8 +112,8 @@ const sidebarOpen = ref(false);
           href="/staf/pengajuan"
           class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all"
           :class="$page.url.startsWith('/staf/pengajuan')
-            ? 'bg-teal-50 text-teal-700 font-bold border-l-4 border-teal-600 shadow-xs'
-            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'"
+            ? 'bg-teal-50 text-teal-800 font-semibold border border-teal-200/70 shadow-2xs'
+            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 border border-transparent'"
         >
           <span class="text-base">📄</span>
           <span>Antrean Pengajuan</span>
@@ -112,8 +123,8 @@ const sidebarOpen = ref(false);
           href="/staf/penduduk"
           class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all"
           :class="$page.url.startsWith('/staf/penduduk')
-            ? 'bg-teal-50 text-teal-700 font-bold border-l-4 border-teal-600 shadow-xs'
-            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'"
+            ? 'bg-teal-50 text-teal-800 font-semibold border border-teal-200/70 shadow-2xs'
+            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 border border-transparent'"
         >
           <span class="text-base">📋</span>
           <span>Data Penduduk</span>
@@ -127,8 +138,8 @@ const sidebarOpen = ref(false);
           href="/admin/desa/identitas-wilayah"
           class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all"
           :class="$page.url.startsWith('/admin/desa/identitas-wilayah')
-            ? 'bg-teal-50 text-teal-700 font-bold border-l-4 border-teal-600 shadow-xs'
-            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'"
+            ? 'bg-teal-50 text-teal-800 font-semibold border border-teal-200/70 shadow-2xs'
+            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 border border-transparent'"
         >
           <span class="text-base">🏛️</span>
           <span>Identitas & Wilayah</span>
@@ -138,8 +149,8 @@ const sidebarOpen = ref(false);
           href="/admin/desa/pemerintahan"
           class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all"
           :class="$page.url.startsWith('/admin/desa/pemerintahan') || $page.url.startsWith('/admin/desa/visi-misi')
-            ? 'bg-teal-50 text-teal-700 font-bold border-l-4 border-teal-600 shadow-xs'
-            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'"
+            ? 'bg-teal-50 text-teal-800 font-semibold border border-teal-200/70 shadow-2xs'
+            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 border border-transparent'"
         >
           <span class="text-base">📜</span>
           <span>Visi Misi & Perangkat</span>
@@ -149,8 +160,8 @@ const sidebarOpen = ref(false);
           href="/staf/desa/potensi"
           class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all"
           :class="$page.url.startsWith('/staf/desa/potensi')
-            ? 'bg-teal-50 text-teal-700 font-bold border-l-4 border-teal-600 shadow-xs'
-            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'"
+            ? 'bg-teal-50 text-teal-800 font-semibold border border-teal-200/70 shadow-2xs'
+            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 border border-transparent'"
         >
           <span class="text-base">🌾</span>
           <span>Potensi Desa</span>
@@ -160,8 +171,8 @@ const sidebarOpen = ref(false);
           href="/staf/desa/sarana"
           class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all"
           :class="$page.url.startsWith('/staf/desa/sarana')
-            ? 'bg-teal-50 text-teal-700 font-bold border-l-4 border-teal-600 shadow-xs'
-            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'"
+            ? 'bg-teal-50 text-teal-800 font-semibold border border-teal-200/70 shadow-2xs'
+            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 border border-transparent'"
         >
           <span class="text-base">🏢</span>
           <span>Sarana & Prasarana</span>
@@ -175,8 +186,8 @@ const sidebarOpen = ref(false);
           href="/akun/ganti-password"
           class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all"
           :class="$page.url.startsWith('/akun/ganti-password')
-            ? 'bg-teal-50 text-teal-700 font-bold border-l-4 border-teal-600 shadow-xs'
-            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'"
+            ? 'bg-teal-50 text-teal-800 font-semibold border border-teal-200/70 shadow-2xs'
+            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 border border-transparent'"
         >
           <span class="text-base">🔑</span>
           <span>Ganti Password</span>
@@ -230,14 +241,11 @@ const sidebarOpen = ref(false);
 
         <!-- Right: Actions & User Info -->
         <div class="flex items-center gap-3">
-          <Link
-            href="/"
-            target="_blank"
-            class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-teal-600 transition px-3 py-1.5 rounded-xl hover:bg-slate-50"
-          >
-            <span>Portal Warga</span>
-            <span>↗</span>
-          </Link>
+          <!-- Date Badge -->
+          <div class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200/70 text-xs font-semibold text-slate-600">
+            <span class="text-teal-600">📅</span>
+            <span>{{ todayFormatted }}</span>
+          </div>
 
           <!-- Status / Role Badge -->
           <div class="flex items-center gap-2 pl-2 border-l border-slate-200">

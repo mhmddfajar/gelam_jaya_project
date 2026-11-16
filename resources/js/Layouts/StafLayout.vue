@@ -9,9 +9,9 @@ const user = computed(() => page.props.auth?.user);
 const sidebarOpen = ref(false);
 
 const todayFormatted = new Intl.DateTimeFormat('id-ID', {
-  weekday: 'short',
+  weekday: 'long',
   day: 'numeric',
-  month: 'short',
+  month: 'long',
   year: 'numeric',
 }).format(new Date());
 </script>
@@ -23,9 +23,11 @@ const todayFormatted = new Intl.DateTimeFormat('id-ID', {
     <!-- Mobile Topbar -->
     <div class="md:hidden bg-white border-b border-slate-200/80 px-4 py-3 flex items-center justify-between sticky top-0 z-40 shadow-xs">
       <div class="flex items-center gap-2.5">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-teal-600 to-cyan-500 text-white font-extrabold flex items-center justify-center text-sm shadow-xs">
-          GJ
-        </div>
+        <img
+          src="/images/logo.webp"
+          alt="Logo Desa Gelam Jaya"
+          class="w-9 h-9 object-contain"
+        />
         <div>
           <span class="font-bold text-sm text-slate-900 tracking-tight block leading-none">Desa Gelam Jaya</span>
           <span class="text-[10px] font-semibold text-teal-600">Staf Pelayanan</span>
@@ -50,9 +52,11 @@ const todayFormatted = new Intl.DateTimeFormat('id-ID', {
       <!-- Brand Header -->
       <div class="h-16 flex items-center justify-between px-6 border-b border-slate-100">
         <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-teal-600 to-cyan-500 text-white font-extrabold flex items-center justify-center text-sm shadow-xs">
-            GJ
-          </div>
+          <img
+            src="/images/logo.webp"
+            alt="Logo Desa Gelam Jaya"
+            class="w-9 h-9 object-contain"
+          />
           <div>
             <h1 class="font-bold text-sm text-slate-900 leading-tight tracking-tight">Desa Gelam Jaya</h1>
             <p class="text-[11px] text-teal-600 font-semibold tracking-wide">Panel Staf Pelayanan</p>
@@ -82,8 +86,8 @@ const todayFormatted = new Intl.DateTimeFormat('id-ID', {
           href="/staf/pengajuan"
           class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all"
           :class="$page.url.startsWith('/staf/pengajuan')
-            ? 'bg-teal-50 text-teal-700 font-bold border-l-4 border-teal-600 shadow-xs'
-            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'"
+            ? 'bg-teal-50 text-teal-800 font-semibold border border-teal-200/70 shadow-2xs'
+            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 border border-transparent'"
         >
           <span class="text-base">📄</span>
           <span>Antrean Pengajuan</span>
@@ -93,8 +97,8 @@ const todayFormatted = new Intl.DateTimeFormat('id-ID', {
           href="/staf/penduduk"
           class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all"
           :class="$page.url.startsWith('/staf/penduduk')
-            ? 'bg-teal-50 text-teal-700 font-bold border-l-4 border-teal-600 shadow-xs'
-            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'"
+            ? 'bg-teal-50 text-teal-800 font-semibold border border-teal-200/70 shadow-2xs'
+            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 border border-transparent'"
         >
           <span class="text-base">📋</span>
           <span>Data Penduduk</span>
@@ -108,8 +112,8 @@ const todayFormatted = new Intl.DateTimeFormat('id-ID', {
           href="/staf/desa/potensi"
           class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all"
           :class="$page.url.startsWith('/staf/desa/potensi')
-            ? 'bg-teal-50 text-teal-700 font-bold border-l-4 border-teal-600 shadow-xs'
-            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'"
+            ? 'bg-teal-50 text-teal-800 font-semibold border border-teal-200/70 shadow-2xs'
+            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 border border-transparent'"
         >
           <span class="text-base">🌾</span>
           <span>Potensi Desa</span>
@@ -119,8 +123,8 @@ const todayFormatted = new Intl.DateTimeFormat('id-ID', {
           href="/staf/desa/sarana"
           class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all"
           :class="$page.url.startsWith('/staf/desa/sarana')
-            ? 'bg-teal-50 text-teal-700 font-bold border-l-4 border-teal-600 shadow-xs'
-            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'"
+            ? 'bg-teal-50 text-teal-800 font-semibold border border-teal-200/70 shadow-2xs'
+            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 border border-transparent'"
         >
           <span class="text-base">🏢</span>
           <span>Sarana & Prasarana</span>
@@ -134,8 +138,8 @@ const todayFormatted = new Intl.DateTimeFormat('id-ID', {
           href="/akun/ganti-password"
           class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all"
           :class="$page.url.startsWith('/akun/ganti-password')
-            ? 'bg-teal-50 text-teal-700 font-bold border-l-4 border-teal-600 shadow-xs'
-            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'"
+            ? 'bg-teal-50 text-teal-800 font-semibold border border-teal-200/70 shadow-2xs'
+            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 border border-transparent'"
         >
           <span class="text-base">🔑</span>
           <span>Ganti Password</span>

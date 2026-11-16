@@ -9,9 +9,9 @@ const user = computed(() => page.props.auth?.user);
 const sidebarOpen = ref(false);
 
 const todayFormatted = new Intl.DateTimeFormat('id-ID', {
-  weekday: 'short',
+  weekday: 'long',
   day: 'numeric',
-  month: 'short',
+  month: 'long',
   year: 'numeric',
 }).format(new Date());
 </script>
@@ -23,9 +23,11 @@ const todayFormatted = new Intl.DateTimeFormat('id-ID', {
     <!-- Mobile Topbar -->
     <div class="md:hidden bg-white border-b border-slate-200/80 px-4 py-3 flex items-center justify-between sticky top-0 z-40 shadow-xs">
       <div class="flex items-center gap-2.5">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white font-extrabold flex items-center justify-center text-sm shadow-xs">
-          GJ
-        </div>
+        <img
+          src="/images/logo.webp"
+          alt="Logo Desa Gelam Jaya"
+          class="w-9 h-9 object-contain"
+        />
         <div>
           <span class="font-bold text-sm text-slate-900 tracking-tight block leading-none">Desa Gelam Jaya</span>
           <span class="text-[10px] font-semibold text-emerald-600">Portal Warga</span>
@@ -50,9 +52,11 @@ const todayFormatted = new Intl.DateTimeFormat('id-ID', {
       <!-- Brand Header -->
       <div class="h-16 flex items-center justify-between px-6 border-b border-slate-100">
         <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white font-extrabold flex items-center justify-center text-sm shadow-xs">
-            GJ
-          </div>
+          <img
+            src="/images/logo.webp"
+            alt="Logo Desa Gelam Jaya"
+            class="w-9 h-9 object-contain"
+          />
           <div>
             <h1 class="font-bold text-sm text-slate-900 leading-tight tracking-tight">Desa Gelam Jaya</h1>
             <p class="text-[11px] text-emerald-600 font-semibold tracking-wide">Portal Layanan Warga</p>
@@ -82,8 +86,8 @@ const todayFormatted = new Intl.DateTimeFormat('id-ID', {
           href="/warga/pengajuan"
           class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all"
           :class="$page.url.startsWith('/warga/pengajuan')
-            ? 'bg-emerald-50 text-emerald-800 font-bold border-l-4 border-emerald-600 shadow-xs'
-            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'"
+            ? 'bg-emerald-50 text-emerald-800 font-semibold border border-emerald-200/70 shadow-2xs'
+            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 border border-transparent'"
         >
           <span class="text-base">📑</span>
           <span>Pengajuan Saya</span>
@@ -97,8 +101,8 @@ const todayFormatted = new Intl.DateTimeFormat('id-ID', {
           href="/warga/profil"
           class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all"
           :class="$page.url.startsWith('/warga/profil')
-            ? 'bg-emerald-50 text-emerald-800 font-bold border-l-4 border-emerald-600 shadow-xs'
-            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'"
+            ? 'bg-emerald-50 text-emerald-800 font-semibold border border-emerald-200/70 shadow-2xs'
+            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 border border-transparent'"
         >
           <span class="text-base">👤</span>
           <span>Data Diri & KTP</span>
@@ -108,8 +112,8 @@ const todayFormatted = new Intl.DateTimeFormat('id-ID', {
           href="/akun/ganti-password"
           class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all"
           :class="$page.url.startsWith('/akun/ganti-password')
-            ? 'bg-emerald-50 text-emerald-800 font-bold border-l-4 border-emerald-600 shadow-xs'
-            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'"
+            ? 'bg-emerald-50 text-emerald-800 font-semibold border border-emerald-200/70 shadow-2xs'
+            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 border border-transparent'"
         >
           <span class="text-base">🔑</span>
           <span>Ganti Password</span>

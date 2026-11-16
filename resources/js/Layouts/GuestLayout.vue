@@ -23,9 +23,11 @@ defineProps({
 
     <div class="relative sm:mx-auto sm:w-full sm:max-w-md text-center">
       <Link href="/" class="inline-flex items-center gap-3 group">
-        <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-teal-600 to-emerald-500 text-white flex items-center justify-center font-bold text-lg shadow-md shadow-teal-700/20 group-hover:scale-105 transition-transform">
-          GJ
-        </div>
+        <img
+          src="/images/logo.webp"
+          alt="Logo Desa Gelam Jaya"
+          class="w-14 h-14 object-contain group-hover:scale-105 transition-transform drop-shadow-sm"
+        />
       </Link>
       <h2 class="mt-4 text-2xl font-bold text-slate-900 tracking-tight">
         {{ title || 'Desa Gelam Jaya' }}

@@ -58,6 +58,28 @@ function getCategoryIcon(category) {
       return 'building';
   }
 }
+
+function cleanPaginationLabel(label) {
+  if (!label) return '';
+  const str = String(label).toLowerCase();
+  if (
+    str.includes('previous') ||
+    str.includes('&laquo;') ||
+    str.includes('«') ||
+    str.includes('sebelumnya')
+  ) {
+    return '&lt;';
+  }
+  if (
+    str.includes('next') ||
+    str.includes('&raquo;') ||
+    str.includes('»') ||
+    str.includes('berikutnya')
+  ) {
+    return '&gt;';
+  }
+  return label;
+}
 </script>
 
 <template>
@@ -200,19 +222,19 @@ function getCategoryIcon(category) {
       </div>
 
       <!-- Pagination -->
-      <div v-if="facilities.links && facilities.links.length > 3" class="flex justify-center gap-1.5 pt-6">
+      <div v-if="facilities.links && facilities.links.length > 3" class="flex justify-center items-center gap-1.5 pt-6">
         <template v-for="(link, index) in facilities.links" :key="index">
           <Link
             v-if="link.url"
             :href="link.url"
-            class="px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-2xs"
-            :class="link.active ? 'bg-teal-600 text-white' : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-50'"
-            v-html="link.label"
+            class="min-w-9 h-9 px-3 rounded-xl text-xs font-bold transition-all shadow-2xs flex items-center justify-center"
+            :class="link.active ? 'bg-teal-600 text-white shadow-xs' : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300'"
+            v-html="cleanPaginationLabel(link.label)"
           />
           <span
             v-else
-            class="px-4 py-2 text-xs text-slate-400 select-none"
-            v-html="link.label"
+            class="min-w-9 h-9 px-3 rounded-xl text-xs text-slate-300 select-none flex items-center justify-center font-bold"
+            v-html="cleanPaginationLabel(link.label)"
           />
         </template>
       </div>
