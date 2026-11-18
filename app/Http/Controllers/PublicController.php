@@ -80,6 +80,7 @@ class PublicController extends Controller
             'potentials' => $potentials,
             'categories' => VillagePotential::CATEGORIES,
             'selectedCategory' => $selectedCategory,
+            'totalCount' => VillagePotential::count(),
         ]);
     }
 
@@ -102,6 +103,7 @@ class PublicController extends Controller
             'categories' => Facility::CATEGORIES,
             'conditions' => Facility::CONDITIONS,
             'selectedCategory' => $selectedCategory,
+            'totalCount' => Facility::count(),
         ]);
     }
 

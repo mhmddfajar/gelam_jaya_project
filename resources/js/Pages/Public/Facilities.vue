@@ -19,6 +19,10 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  totalCount: {
+    type: Number,
+    default: 0,
+  },
 });
 
 function selectCategory(categoryKey) {
@@ -27,35 +31,29 @@ function selectCategory(categoryKey) {
   }, { preserveState: true });
 }
 
-function getConditionBadgeClass(condition) {
-  switch (condition) {
-    case 'baik':
-      return 'bg-emerald-50 text-emerald-700 border-emerald-200/80';
-    case 'rusak_ringan':
-      return 'bg-amber-50 text-amber-700 border-amber-200/80';
-    case 'rusak_berat':
-      return 'bg-rose-50 text-rose-700 border-rose-200/80';
-    default:
-      return 'bg-slate-100 text-slate-700 border-slate-200';
-  }
-}
-
 function getCategoryIcon(category) {
   switch (category) {
     case 'pendidikan':
       return 'school';
     case 'kesehatan':
       return 'health';
-    case 'fasilitas_umum':
+    case 'pemerintahan':
       return 'government';
-    case 'ibadah':
-      return 'worship';
-    case 'olahraga':
-      return 'sports';
-    case 'jalan_transportasi':
-      return 'transport';
     default:
       return 'building';
+  }
+}
+
+function getConditionBadgeClass(condition) {
+  switch (condition) {
+    case 'baik':
+      return 'bg-emerald-50 text-emerald-700 border-emerald-200/70';
+    case 'rusak_ringan':
+      return 'bg-amber-50 text-amber-700 border-amber-200/70';
+    case 'rusak_berat':
+      return 'bg-rose-50 text-rose-700 border-rose-200/70';
+    default:
+      return 'bg-slate-50 text-slate-700 border-slate-200/70';
   }
 }
 
@@ -86,12 +84,12 @@ function cleanPaginationLabel(label) {
   <Head title="Sarana & Prasarana Publik Desa Gelam Jaya" />
 
   <AppLayout>
-    <div class="space-y-10 py-2 sm:py-6 max-w-6xl mx-auto">
-      <!-- Header Banner Konsisten (SaaS Modern, Breadcrumb, Gradient Title) -->
-      <section class="relative overflow-hidden rounded-3xl py-12 sm:py-16 px-6 sm:px-12 bg-gradient-to-b from-teal-50/50 via-white to-slate-50 border border-teal-100/70 shadow-xs text-center">
-        <!-- Ambient Background Glows -->
-        <div class="absolute -top-24 -left-24 w-80 h-80 bg-teal-400/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="absolute -bottom-24 -right-24 w-80 h-80 bg-cyan-400/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="space-y-10 sm:space-y-12 py-2 sm:py-6 max-w-6xl mx-auto">
+      <!-- Header Banner Konsisten (SaaS Modern, Ambient Slow Float) -->
+      <section class="relative overflow-hidden rounded-3xl py-12 sm:py-16 px-6 sm:px-12 bg-gradient-to-b from-teal-50/50 via-white to-slate-50 border border-teal-100/70 shadow-xs text-center animate-fade-in-up">
+        <!-- Ambient Background Glows with Slow Float Physics -->
+        <div class="absolute -top-24 -left-24 w-80 sm:w-96 h-80 sm:h-96 bg-teal-400/10 rounded-full blur-3xl pointer-events-none animate-float-slow"></div>
+        <div class="absolute -bottom-24 -right-24 w-80 sm:w-96 h-80 sm:h-96 bg-cyan-400/10 rounded-full blur-3xl pointer-events-none animate-float-slow-delayed"></div>
 
         <div class="relative z-10 max-w-3xl mx-auto space-y-4">
           <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight">
@@ -112,19 +110,19 @@ function cleanPaginationLabel(label) {
         <button
           type="button"
           @click="selectCategory('')"
-          class="px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-2xs duration-200"
+          class="px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-2xs duration-200 active:scale-[0.98]"
           :class="!selectedCategory
             ? 'bg-teal-600 text-white shadow-xs scale-105'
             : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900'"
         >
-          Semua Sarana ({{ facilities.total || facilities.data.length }})
+          Semua Sarana ({{ totalCount || facilities.total || facilities.data.length }})
         </button>
         <button
           v-for="(label, key) in categories"
           :key="key"
           type="button"
           @click="selectCategory(key)"
-          class="px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-2xs duration-200"
+          class="px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-2xs duration-200 active:scale-[0.98]"
           :class="selectedCategory === key
             ? 'bg-teal-600 text-white shadow-xs scale-105'
             : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900'"
@@ -133,12 +131,13 @@ function cleanPaginationLabel(label) {
         </button>
       </div>
 
-      <!-- Facilities Grid (Modern SaaS Cards with Thematic Icons) -->
+      <!-- Facilities Grid (Modern SaaS Cards with Thematic Icons & Staggered Smooth Enter) -->
       <div v-if="facilities.data.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div
-          v-for="item in facilities.data"
-          :key="item.id"
-          class="bg-white rounded-2xl border border-slate-200/70 p-6 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-slate-300/80 flex flex-col justify-between space-y-4 group"
+          v-for="(item, index) in facilities.data"
+          :key="item.id + '-' + (selectedCategory || 'all')"
+          class="bg-white rounded-2xl border border-slate-200/70 p-6 shadow-xs transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-teal-900/5 hover:border-teal-200/80 flex flex-col justify-between space-y-4 group animate-smooth-enter"
+          :style="{ animationDelay: `${(index % 9) * 60}ms` }"
         >
           <div class="space-y-3.5">
             <!-- Header Badges & Thematic SVG Icon -->
@@ -204,9 +203,11 @@ function cleanPaginationLabel(label) {
       </div>
 
       <!-- Empty State -->
-      <div v-else class="bg-white rounded-3xl border border-slate-200/70 p-12 text-center max-w-md mx-auto space-y-4 shadow-xs">
-        <div class="w-16 h-16 rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center text-3xl mx-auto shadow-2xs">
-          🏢
+      <div v-else class="bg-white rounded-3xl border border-slate-200/70 p-12 text-center max-w-md mx-auto space-y-4 shadow-xs animate-fade-in">
+        <div class="w-16 h-16 rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center mx-auto shadow-2xs">
+          <svg class="w-8 h-8 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+          </svg>
         </div>
         <h3 class="text-base font-bold text-slate-900">Belum Ada Data Sarana</h3>
         <p class="text-xs text-slate-400 leading-relaxed">
@@ -215,7 +216,7 @@ function cleanPaginationLabel(label) {
         <button
           v-if="selectedCategory"
           @click="selectCategory('')"
-          class="inline-block px-4 py-2 rounded-xl bg-teal-50 text-teal-700 hover:bg-teal-100 font-bold text-xs transition"
+          class="inline-block px-4 py-2 rounded-xl bg-teal-50 text-teal-700 hover:bg-teal-100 font-bold text-xs transition active:scale-[0.98]"
         >
           Tampilkan Semua Sarana
         </button>
@@ -227,7 +228,7 @@ function cleanPaginationLabel(label) {
           <Link
             v-if="link.url"
             :href="link.url"
-            class="min-w-9 h-9 px-3 rounded-xl text-xs font-bold transition-all shadow-2xs flex items-center justify-center"
+            class="min-w-9 h-9 px-3 rounded-xl text-xs font-bold transition-all shadow-2xs flex items-center justify-center active:scale-[0.98]"
             :class="link.active ? 'bg-teal-600 text-white shadow-xs' : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300'"
             v-html="cleanPaginationLabel(link.label)"
           />

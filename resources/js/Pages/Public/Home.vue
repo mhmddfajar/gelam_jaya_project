@@ -1,4 +1,5 @@
 <script setup>
+import { onMounted, onUnmounted } from 'vue';
 import { Head, Link } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 
@@ -32,6 +33,38 @@ const props = defineProps({
   },
 });
 
+let scrollObserver = null;
+
+onMounted(() => {
+  const elements = document.querySelectorAll('.reveal-on-scroll');
+  if ('IntersectionObserver' in window) {
+    scrollObserver = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('reveal-visible');
+            obs.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '0px 0px -40px 0px',
+      }
+    );
+
+    elements.forEach((el) => scrollObserver.observe(el));
+  } else {
+    elements.forEach((el) => el.classList.add('reveal-visible'));
+  }
+});
+
+onUnmounted(() => {
+  if (scrollObserver) {
+    scrollObserver.disconnect();
+  }
+});
+
 function getPotentialIcon(category) {
   switch (category) {
     case 'pertanian':
@@ -54,17 +87,17 @@ function getPotentialIcon(category) {
   <Head title="Beranda Resmi Desa Gelam Jaya" />
 
   <AppLayout>
-    <div class="space-y-16 py-2 sm:py-6">
-      <!-- Hero Section (Clean, Modern SaaS, Gradient Text, Decorative Blurs) -->
-      <section class="relative overflow-hidden rounded-3xl py-14 sm:py-20 px-6 sm:px-12 bg-gradient-to-b from-teal-50/50 via-white to-slate-50 border border-teal-100/70 shadow-xs text-center">
-        <!-- Soft Ambient Background Glows -->
-        <div class="absolute -top-24 -left-24 w-96 h-96 bg-teal-400/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-cyan-400/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="space-y-12 sm:space-y-16 py-2 sm:py-6">
+      <!-- Hero Section (Clean, Modern SaaS, Gradient Text, Floating Ambient Blurs) -->
+      <section class="relative overflow-hidden rounded-3xl py-12 sm:py-20 lg:py-24 px-5 sm:px-12 bg-gradient-to-b from-teal-50/50 via-white to-slate-50 border border-teal-100/70 shadow-xs text-center animate-fade-in-up">
+        <!-- Soft Ambient Background Glows with Slow Float Physics -->
+        <div class="absolute -top-24 -left-24 w-80 sm:w-96 h-80 sm:h-96 bg-teal-400/10 rounded-full blur-3xl pointer-events-none animate-float-slow"></div>
+        <div class="absolute -bottom-24 -right-24 w-80 sm:w-96 h-80 sm:h-96 bg-cyan-400/10 rounded-full blur-3xl pointer-events-none animate-float-slow-delayed"></div>
 
         <!-- Watermark Logo Desa -->
         <img
           src="/images/logo.webp"
-          class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-72 md:w-96 opacity-[0.07] mix-blend-multiply pointer-events-none select-none"
+          class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-64 sm:w-80 md:w-96 opacity-[0.06] mix-blend-multiply pointer-events-none select-none transition-opacity duration-700"
           alt="Watermark Logo Desa"
         />
 
@@ -73,7 +106,7 @@ function getPotentialIcon(category) {
             <p class="text-sm md:text-base font-semibold text-teal-600 tracking-wide uppercase mb-2">
               Selamat Datang di Portal Resmi
             </p>
-            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-tight">
+            <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.15]">
               Pemerintah Desa
               <span class="bg-gradient-to-r from-teal-600 via-emerald-600 to-cyan-600 bg-clip-text text-transparent">
                 {{ profile.name || 'Gelam Jaya' }}
@@ -81,15 +114,15 @@ function getPotentialIcon(category) {
             </h1>
           </div>
 
-          <p class="text-base sm:text-lg text-slate-500 max-w-2xl mx-auto leading-relaxed">
+          <p class="text-sm sm:text-base lg:text-lg text-slate-500 max-w-2xl mx-auto leading-relaxed">
             Kecamatan {{ profile.district || 'Pasar Kemis' }}, {{ profile.regency || 'Kabupaten Tangerang' }}, Provinsi {{ profile.province || 'Banten' }}.
             Pusat pelayanan administrasi terpadu masyarakat dengan komitmen kecepatan, integritas, dan keterbukaan publik.
           </p>
 
-          <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
             <Link
               href="/login"
-              class="px-6 py-3.5 rounded-2xl bg-teal-600 hover:bg-teal-700 active:scale-[0.98] transition-transform text-white font-bold text-sm shadow-md hover:shadow-xl hover:shadow-teal-900/15 flex items-center gap-2"
+              class="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-teal-600 hover:bg-teal-700 active:scale-[0.98] transition-all duration-200 text-white font-bold text-sm shadow-md hover:shadow-xl hover:shadow-teal-900/15 flex items-center justify-center gap-2"
             >
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -99,7 +132,7 @@ function getPotentialIcon(category) {
 
             <Link
               href="/profil"
-              class="px-6 py-3.5 rounded-2xl bg-white hover:bg-slate-50 active:scale-[0.98] transition-transform text-slate-700 border border-slate-200/90 font-bold text-sm shadow-2xs hover:shadow-md flex items-center justify-center"
+              class="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-white hover:bg-slate-50 active:scale-[0.98] transition-all duration-200 text-slate-700 border border-slate-200/90 font-bold text-sm shadow-2xs hover:shadow-md flex items-center justify-center"
             >
               Jelajahi Profil Desa
             </Link>
@@ -107,83 +140,97 @@ function getPotentialIcon(category) {
         </div>
       </section>
 
-      <!-- 4 Stat Cards Utama (Data Riil: 40.030 Jiwa, 11.015 KK, 4 Dusun, 294 Ha) -->
-      <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+      <!-- 4 Stat Cards Utama (Responsive: 2 Kolom di Mobile, 4 Kolom di Desktop, Staggered Reveal) -->
+      <section class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
         <!-- 1. Total Penduduk -->
-        <div class="bg-white rounded-2xl p-6 border border-slate-200/70 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-slate-300/80 text-center group">
-          <div class="w-12 h-12 rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center mx-auto mb-3 shadow-2xs group-hover:scale-110 transition-transform duration-300">
-            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div
+          class="reveal-on-scroll reveal-hidden bg-white rounded-2xl p-4 sm:p-6 border border-slate-200/70 shadow-xs transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg hover:shadow-teal-900/5 hover:border-teal-200/80 text-center group"
+          style="transition-delay: 50ms;"
+        >
+          <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center mx-auto mb-2.5 sm:mb-3 shadow-2xs group-hover:scale-110 transition-transform duration-300">
+            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
             </svg>
           </div>
-          <p class="text-2xl sm:text-3xl font-black text-slate-800 tracking-tight">
+          <p class="text-xl sm:text-3xl font-black text-slate-800 tracking-tight">
             {{ Number(stats.total_residents || 40030).toLocaleString('id-ID') }}
           </p>
-          <p class="text-xs font-bold text-slate-400 mt-1 uppercase tracking-wider">Total Penduduk (Jiwa)</p>
+          <p class="text-[10px] sm:text-xs font-bold text-slate-400 mt-1 uppercase tracking-wider">Total Penduduk (Jiwa)</p>
         </div>
 
         <!-- 2. Jumlah KK -->
-        <div class="bg-white rounded-2xl p-6 border border-slate-200/70 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-slate-300/80 text-center group">
-          <div class="w-12 h-12 rounded-2xl bg-cyan-50 text-cyan-600 flex items-center justify-center mx-auto mb-3 shadow-2xs group-hover:scale-110 transition-transform duration-300">
-            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div
+          class="reveal-on-scroll reveal-hidden bg-white rounded-2xl p-4 sm:p-6 border border-slate-200/70 shadow-xs transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg hover:shadow-cyan-900/5 hover:border-cyan-200/80 text-center group"
+          style="transition-delay: 100ms;"
+        >
+          <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-cyan-50 text-cyan-600 flex items-center justify-center mx-auto mb-2.5 sm:mb-3 shadow-2xs group-hover:scale-110 transition-transform duration-300">
+            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
             </svg>
           </div>
-          <p class="text-2xl sm:text-3xl font-black text-cyan-600 tracking-tight">
+          <p class="text-xl sm:text-3xl font-black text-cyan-600 tracking-tight">
             {{ Number(stats.total_households || 11015).toLocaleString('id-ID') }}
           </p>
-          <p class="text-xs font-bold text-slate-400 mt-1 uppercase tracking-wider">Kepala Keluarga (KK)</p>
+          <p class="text-[10px] sm:text-xs font-bold text-slate-400 mt-1 uppercase tracking-wider">Kepala Keluarga (KK)</p>
         </div>
 
         <!-- 3. Wilayah Dusun -->
-        <div class="bg-white rounded-2xl p-6 border border-slate-200/70 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-slate-300/80 text-center group">
-          <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto mb-3 shadow-2xs group-hover:scale-110 transition-transform duration-300">
-            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div
+          class="reveal-on-scroll reveal-hidden bg-white rounded-2xl p-4 sm:p-6 border border-slate-200/70 shadow-xs transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg hover:shadow-emerald-900/5 hover:border-emerald-200/80 text-center group"
+          style="transition-delay: 150ms;"
+        >
+          <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto mb-2.5 sm:mb-3 shadow-2xs group-hover:scale-110 transition-transform duration-300">
+            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
           </div>
-          <p class="text-2xl sm:text-3xl font-black text-emerald-600 tracking-tight">
+          <p class="text-xl sm:text-3xl font-black text-emerald-600 tracking-tight">
             {{ stats.total_hamlets || 4 }} Dusun
           </p>
-          <p class="text-xs font-bold text-slate-400 mt-1 uppercase tracking-wider">Wilayah Administratif</p>
+          <p class="text-[10px] sm:text-xs font-bold text-slate-400 mt-1 uppercase tracking-wider">Wilayah Dusun</p>
         </div>
 
         <!-- 4. Luas Wilayah -->
-        <div class="bg-white rounded-2xl p-6 border border-slate-200/70 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-slate-300/80 text-center group">
-          <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto mb-3 shadow-2xs group-hover:scale-110 transition-transform duration-300">
-            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div
+          class="reveal-on-scroll reveal-hidden bg-white rounded-2xl p-4 sm:p-6 border border-slate-200/70 shadow-xs transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg hover:shadow-indigo-900/5 hover:border-indigo-200/80 text-center group"
+          style="transition-delay: 200ms;"
+        >
+          <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto mb-2.5 sm:mb-3 shadow-2xs group-hover:scale-110 transition-transform duration-300">
+            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
             </svg>
           </div>
-          <p class="text-2xl sm:text-3xl font-black text-indigo-600 tracking-tight">
+          <p class="text-xl sm:text-3xl font-black text-indigo-600 tracking-tight">
             {{ Number(stats.area_size_ha || 294).toLocaleString('id-ID') }} Ha
           </p>
-          <p class="text-xs font-bold text-slate-400 mt-1 uppercase tracking-wider">Luas Wilayah Desa</p>
+          <p class="text-[10px] sm:text-xs font-bold text-slate-400 mt-1 uppercase tracking-wider">Luas Wilayah Desa</p>
         </div>
       </section>
 
       <!-- Pelayanan Administrasi Dua Jalur (Daring & Luring) -->
-      <section class="bg-white rounded-3xl border border-slate-200/70 p-6 sm:p-10 shadow-xs space-y-8">
+      <section class="reveal-on-scroll reveal-hidden bg-white rounded-3xl border border-slate-200/70 p-6 sm:p-10 shadow-xs space-y-8">
         <div class="text-center max-w-2xl mx-auto space-y-2">
           <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
             Sistem Pelayanan Terpadu Satu Pintu
           </h2>
-          <p class="text-xs sm:text-sm text-slate-400">
+          <p class="text-xs sm:text-sm text-slate-500 leading-relaxed">
             Dua jalur pengajuan surat administrasi warga yang diproses dalam satu pangkalan data terintegrasi.
           </p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <!-- Card Daring -->
-          <div class="p-8 rounded-3xl bg-gradient-to-br from-teal-50/60 to-cyan-50/40 border border-teal-100 shadow-2xs transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-teal-900/5 space-y-4 flex flex-col justify-between">
+          <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-teal-50/70 to-cyan-50/40 border border-teal-100 shadow-2xs transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-teal-900/5 hover:border-teal-200/90 space-y-4 flex flex-col justify-between group">
             <div class="space-y-3">
-              <div class="w-12 h-12 rounded-2xl bg-teal-600 text-white flex items-center justify-center shadow-sm shadow-teal-600/30">
+              <div class="w-12 h-12 rounded-2xl bg-teal-600 text-white flex items-center justify-center shadow-md shadow-teal-600/25 group-hover:scale-105 transition-transform duration-300">
                 <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
               </div>
-              <h3 class="text-xl font-bold text-slate-900">Layanan Daring (Mandiri Online)</h3>
+              <h3 class="text-lg sm:text-xl font-bold text-slate-900 group-hover:text-teal-700 transition">
+                Layanan Daring (Mandiri Online)
+              </h3>
               <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
                 Warga mendaftar akun berbasis NIK, mengajukan surat permohonan dari rumah, mengunggah dokumen persyaratan, dan memantau status secara langsung melalui gawai.
               </p>
@@ -191,7 +238,7 @@ function getPotentialIcon(category) {
             <div class="pt-2">
               <Link
                 href="/register"
-                class="inline-flex items-center text-xs font-bold text-teal-700 hover:text-teal-900 transition"
+                class="inline-flex items-center text-xs font-bold text-teal-700 hover:text-teal-900 transition active:scale-[0.98]"
               >
                 Daftar Akun Portal Warga
               </Link>
@@ -199,21 +246,25 @@ function getPotentialIcon(category) {
           </div>
 
           <!-- Card Luring -->
-          <div class="p-8 rounded-3xl bg-slate-50/80 border border-slate-200/80 shadow-2xs transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-900/5 space-y-4 flex flex-col justify-between">
+          <div class="p-6 sm:p-8 rounded-3xl bg-slate-50/80 border border-slate-200/80 shadow-2xs transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-slate-900/5 hover:border-slate-300/90 space-y-4 flex flex-col justify-between group">
             <div class="space-y-3">
-              <div class="w-12 h-12 rounded-2xl bg-slate-800 text-white flex items-center justify-center shadow-sm shadow-slate-800/30">
+              <div class="w-12 h-12 rounded-2xl bg-slate-800 text-white flex items-center justify-center shadow-md shadow-slate-800/25 group-hover:scale-105 transition-transform duration-300">
                 <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                 </svg>
               </div>
-              <h3 class="text-xl font-bold text-slate-900">Layanan Luring (Loket Kantor Desa)</h3>
+              <h3 class="text-lg sm:text-xl font-bold text-slate-900 group-hover:text-slate-800 transition">
+                Layanan Luring (Loket Kantor Desa)
+              </h3>
               <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
                 Warga yang datang langsung ke kantor desa tetap dilayani ramah oleh staf loket pelayanan. Pengajuan diinput ke sistem yang sama dan siap diproses seketika.
               </p>
             </div>
             <div class="pt-2">
-              <span class="inline-flex items-center text-xs font-semibold text-slate-500 gap-1">
-                <span>🕒</span>
+              <span class="inline-flex items-center text-xs font-semibold text-slate-500 gap-1.5">
+                <svg class="w-3.5 h-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
                 <span>Jam Layanan: Senin – Jumat (08.00 – 16.00 WIB)</span>
               </span>
             </div>
@@ -222,19 +273,21 @@ function getPotentialIcon(category) {
       </section>
 
       <!-- Visi & Misi Card (Dark Premium Slate-900 to Teal-950) -->
-      <section v-if="profile.vision" class="relative overflow-hidden bg-gradient-to-r from-slate-900 via-slate-900 to-teal-950 text-white rounded-3xl p-8 sm:p-12 shadow-xl">
+      <section v-if="profile.vision" class="reveal-on-scroll reveal-hidden relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-900 to-teal-950 text-white rounded-3xl p-6 sm:p-12 shadow-xl border border-slate-800">
         <!-- Giant Decorative Quote Watermark -->
-        <div class="absolute -right-6 -bottom-10 text-white/[0.04] text-[180px] font-serif font-black select-none pointer-events-none">
+        <div class="absolute -right-6 -bottom-10 text-white/[0.04] text-[160px] sm:text-[200px] font-serif font-black select-none pointer-events-none">
           “
         </div>
 
         <div class="relative z-10 max-w-3xl space-y-4">
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-400/30 text-teal-300 text-xs font-bold uppercase tracking-wider">
-            <span>📜</span>
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-400/30 text-teal-300 text-xs font-bold uppercase tracking-wider">
+            <svg class="w-3.5 h-3.5 text-teal-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
             <span>Visi Pembangunan Desa</span>
           </div>
 
-          <blockquote class="text-xl sm:text-2xl lg:text-3xl font-extrabold leading-relaxed text-teal-50 italic">
+          <blockquote class="text-lg sm:text-2xl lg:text-3xl font-extrabold leading-relaxed text-teal-50 italic">
             "{{ profile.vision }}"
           </blockquote>
 
@@ -253,31 +306,33 @@ function getPotentialIcon(category) {
         </div>
       </section>
 
-      <!-- Potensi Unggulan Preview (Cards with SVG Gradients, No Broken Image) -->
-      <section v-if="potentials.length > 0" class="space-y-6">
+      <!-- Potensi Unggulan Preview (Cards with Real Photography & Smooth Hover Physics) -->
+      <section v-if="potentials.length > 0" class="reveal-on-scroll reveal-hidden space-y-6">
         <div class="flex items-center justify-between">
           <div>
             <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Potensi Unggulan Desa</h2>
             <p class="text-xs sm:text-sm text-slate-400 mt-1">Sektor ekonomi, komoditas, dan UMKM yang mendorong kemandirian warga.</p>
           </div>
-          <Link href="/potensi" class="text-xs font-bold text-teal-600 hover:text-teal-700">
+          <Link href="/potensi" class="text-xs font-bold text-teal-600 hover:text-teal-700 transition">
             Lihat Semua ({{ stats.total_potentials || potentials.length }})
           </Link>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <div
-            v-for="item in potentials"
+            v-for="(item, index) in potentials.slice(0, 3)"
             :key="item.id"
-            class="bg-white rounded-2xl border border-slate-200/70 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-teal-900/5 overflow-hidden flex flex-col group"
+            class="reveal-on-scroll reveal-hidden bg-white rounded-2xl border border-slate-200/70 shadow-xs transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-teal-900/5 hover:border-teal-200/80 overflow-hidden flex flex-col group"
+            :style="{ transitionDelay: `${index * 80}ms` }"
           >
-            <!-- Card Image or Beautiful SVG Fallback Header -->
-            <div class="h-44 overflow-hidden relative">
+            <!-- Card Image with Natural Zoom-in Transition -->
+            <div class="h-48 overflow-hidden relative bg-slate-100">
               <img
                 v-if="item.photo_path"
                 :src="item.photo_path"
                 :alt="item.title"
-                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                loading="lazy"
               />
               <div
                 v-else
@@ -306,7 +361,7 @@ function getPotentialIcon(category) {
             </div>
 
             <!-- Card Content -->
-            <div class="p-6 flex-1 flex flex-col justify-between space-y-3">
+            <div class="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-3">
               <div>
                 <h3 class="font-bold text-slate-900 text-base leading-snug group-hover:text-teal-700 transition">
                   {{ item.title }}
@@ -328,39 +383,40 @@ function getPotentialIcon(category) {
         </div>
       </section>
 
-      <!-- Section Perangkat Desa (Modern Badge Inisial, Nama, Jabatan, Periode) -->
-      <section v-if="officials.length > 0" class="space-y-6">
+      <!-- Section Perangkat Desa (Responsive 2 Kolom di Mobile, 4 di Desktop, Staggered Reveal) -->
+      <section v-if="officials.length > 0" class="reveal-on-scroll reveal-hidden space-y-6">
         <div class="flex items-center justify-between">
           <div>
             <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Pemerintahan Desa</h2>
             <p class="text-xs sm:text-sm text-slate-400 mt-1">Aparatur yang siap mengabdi dan melayani kebutuhan administrasi warga.</p>
           </div>
-          <Link href="/profil" class="text-xs font-bold text-teal-600 hover:text-teal-700">
+          <Link href="/profil" class="text-xs font-bold text-teal-600 hover:text-teal-700 transition">
             Struktur Lengkap (12 Aparatur)
           </Link>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
           <div
-            v-for="official in officials"
+            v-for="(official, index) in officials.slice(0, 4)"
             :key="official.id"
-            class="bg-white rounded-2xl p-6 border border-slate-200/70 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-teal-900/5 text-center flex flex-col items-center group"
+            class="reveal-on-scroll reveal-hidden bg-white rounded-2xl p-4 sm:p-6 border border-slate-200/70 shadow-xs transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg hover:shadow-teal-900/5 hover:border-teal-200/80 text-center flex flex-col items-center group"
+            :style="{ transitionDelay: `${index * 80}ms` }"
           >
             <!-- Modern Avatar Badge with Ring Accent -->
-            <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-teal-50 to-emerald-50 border-2 border-teal-100/90 overflow-hidden mb-4 flex items-center justify-center text-xl font-black text-teal-700 shadow-2xs group-hover:scale-105 transition-transform duration-300">
-              <img v-if="official.photo_path" :src="official.photo_path" :alt="official.name" class="w-full h-full object-cover" />
+            <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-teal-50 to-emerald-50 border-2 border-teal-100/90 overflow-hidden mb-3 sm:mb-4 flex items-center justify-center text-lg sm:text-xl font-black text-teal-700 shadow-2xs group-hover:scale-105 group-hover:border-teal-300 transition-all duration-300">
+              <img v-if="official.photo_path" :src="official.photo_path" :alt="official.name" class="w-full h-full object-cover" loading="lazy" />
               <span v-else class="tracking-wider">{{ official.name.charAt(0) }}</span>
             </div>
 
-            <h3 class="font-bold text-slate-900 text-sm leading-snug group-hover:text-teal-700 transition">
+            <h3 class="font-bold text-slate-900 text-xs sm:text-sm leading-snug group-hover:text-teal-700 transition">
               {{ official.name }}
             </h3>
 
-            <p class="text-xs text-teal-600 font-bold mt-1">
+            <p class="text-[11px] sm:text-xs text-teal-600 font-bold mt-1">
               {{ official.position }}
             </p>
 
-            <div class="mt-3 pt-2.5 border-t border-slate-100 w-full flex items-center justify-between text-[11px] text-slate-400">
+            <div class="mt-3 pt-2.5 border-t border-slate-100 w-full flex items-center justify-between text-[10px] sm:text-[11px] text-slate-400">
               <span>Masa Bakti</span>
               <span class="font-mono font-medium text-slate-600">
                 {{ official.period_start || '2021' }} – {{ official.period_end || '2027' }}
@@ -371,11 +427,14 @@ function getPotentialIcon(category) {
       </section>
 
       <!-- Section Lokasi & Layanan Kantor Desa (Google Maps Embed, Alamat, Jam Layanan) -->
-      <section class="bg-white rounded-3xl border border-slate-200/70 p-6 sm:p-10 shadow-xs space-y-8">
+      <section class="reveal-on-scroll reveal-hidden bg-white rounded-3xl border border-slate-200/70 p-6 sm:p-10 shadow-xs space-y-8">
         <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-100 pb-5">
           <div>
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-50 text-teal-700 text-xs font-bold mb-2">
-              <span>📍</span>
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 text-teal-700 text-xs font-bold mb-2">
+              <svg class="w-3.5 h-3.5 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
               <span>Lokasi & Kontak Resmi</span>
             </div>
             <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
@@ -390,7 +449,7 @@ function getPotentialIcon(category) {
             href="https://maps.google.com/?q=Kantor+Desa+Gelam+Jaya+Pasar+Kemis+Tangerang"
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-teal-50 text-teal-700 hover:bg-teal-100 border border-teal-200/80 text-xs font-bold transition shadow-2xs self-start md:self-auto"
+            class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-teal-50 text-teal-700 hover:bg-teal-100 border border-teal-200/80 text-xs font-bold transition shadow-2xs self-start md:self-auto active:scale-[0.98]"
           >
             <svg class="w-4 h-4 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -447,16 +506,16 @@ function getPotentialIcon(category) {
               </div>
             </div>
 
-            <div class="pt-2 flex flex-wrap gap-3">
+            <div class="pt-2 flex flex-col sm:flex-row gap-3">
               <Link
                 href="/login"
-                class="px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-semibold text-xs shadow-sm hover:shadow-md transition-all flex items-center justify-center"
+                class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-semibold text-xs shadow-sm hover:shadow-md transition-all active:scale-[0.98] flex items-center justify-center"
               >
                 Masuk Layanan Mandiri
               </Link>
               <Link
                 href="/profil"
-                class="px-5 py-2.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold text-xs transition flex items-center justify-center"
+                class="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold text-xs transition-all active:scale-[0.98] flex items-center justify-center"
               >
                 Lihat Profil Lengkap
               </Link>
@@ -464,7 +523,7 @@ function getPotentialIcon(category) {
           </div>
 
           <!-- Peta Embed Google Maps (7 Kolom) -->
-          <div class="lg:col-span-7 rounded-2xl overflow-hidden border border-slate-200/80 shadow-2xs min-h-[320px] sm:min-h-[380px] bg-slate-100 relative">
+          <div class="lg:col-span-7 rounded-2xl overflow-hidden border border-slate-200/80 shadow-2xs min-h-[300px] sm:min-h-[380px] bg-slate-100 relative">
             <iframe
               src="https://maps.google.com/maps?q=Kantor+Desa+Gelam+Jaya+Pasar+Kemis+Tangerang&t=&z=16&ie=UTF8&iwloc=&output=embed"
               width="100%"
@@ -474,7 +533,7 @@ function getPotentialIcon(category) {
               loading="lazy"
               referrerpolicy="no-referrer-when-downgrade"
               title="Peta Lokasi Kantor Desa Gelam Jaya"
-              class="w-full h-full min-h-[320px] sm:min-h-[380px]"
+              class="w-full h-full min-h-[300px] sm:min-h-[380px]"
             ></iframe>
           </div>
         </div>

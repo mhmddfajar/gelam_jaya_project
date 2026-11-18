@@ -303,7 +303,7 @@ const panelRoute = computed(() => {
             <ul class="text-xs space-y-2 text-slate-500">
               <li><Link href="/login" class="hover:text-teal-600 transition">Masuk Portal Layanan</Link></li>
               <li><Link href="/register" class="hover:text-teal-600 transition">Registrasi Akun Warga</Link></li>
-              <li><span class="text-slate-400">Jam Layanan: Senin–Jumat 08.00–15.00 WIB</span></li>
+              <li><span class="text-slate-400">Jam Layanan: Senin–Jumat 08.00–16  .00 WIB</span></li>
             </ul>
           </div>
         </div>

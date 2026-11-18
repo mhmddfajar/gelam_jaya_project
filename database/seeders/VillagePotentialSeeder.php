@@ -20,30 +20,35 @@ class VillagePotentialSeeder extends Seeder
                 'category' => 'umkm',
                 'location' => 'Dusun I, Desa Gelam Jaya',
                 'description' => 'Produksi kerajinan rumah tangga dan produk olahan makanan khas warga Gelam Jaya yang telah menembus pasar regional Tangerang dan Jabodetabek.',
+                'photo_path' => '/images/potensi/umkm-anyaman.jpg',
             ],
             [
                 'title' => 'Kawasan Budidaya Ikan Nila & Lele Bioflok Mandiri',
                 'category' => 'perikanan',
                 'location' => 'Dusun II, Desa Gelam Jaya',
                 'description' => 'Pemanfaatan sistem bioflok modern ramah lingkungan dengan produktivitas tinggi, menyuplai kebutuhan pangan segar warga dan restoran sekitar.',
+                'photo_path' => '/images/potensi/perikanan-bioflok.jpg',
             ],
             [
                 'title' => 'Pertanian Hidroponik & Sayuran Hijau Urban Farming',
                 'category' => 'pertanian',
                 'location' => 'Dusun III, Desa Gelam Jaya',
                 'description' => 'Pengembangan komoditas sayuran hijau (selada, pakcoy, kangkung) dengan metode hidroponik ramah lingkungan yang dikelola kelompok tani muda desa.',
+                'photo_path' => '/images/potensi/pertanian-hidroponik.jpg',
             ],
             [
                 'title' => 'Taman Hijau & Kawasan Terbuka Ramah Anak',
                 'category' => 'wisata',
                 'location' => 'Dusun IV, Desa Gelam Jaya',
                 'description' => 'Area terbuka hijau publik yang asri untuk rekreasi warga, ruang interaksi sosial komunitas, dan sarana edukasi lingkungan hidup keluarga.',
+                'photo_path' => '/images/potensi/wisata-taman.jpg',
             ],
             [
                 'title' => 'Peternakan Rakyat & Sentra Unggas Produktif',
                 'category' => 'peternakan',
                 'location' => 'Dusun I, Desa Gelam Jaya',
                 'description' => 'Peternakan rakyat mandiri dengan tata kelola higienis yang menghasilkan pasokan telur, susu segar, dan kebutuhan hewani pasar lokal.',
+                'photo_path' => '/images/potensi/peternakan-unggas.jpg',
             ],
         ];
 

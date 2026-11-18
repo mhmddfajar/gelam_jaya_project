@@ -42,3 +42,69 @@
 .animate-slide-up {
   animation: fadeInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* Ambient Slow Floating for Background Blurs */
+@keyframes floatSlow {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(14px, -18px) scale(1.06);
+  }
+  100% {
+    transform: translate(-10px, 12px) scale(0.96);
+  }
+}
+
+.animate-float-slow {
+  animation: floatSlow 14s ease-in-out infinite alternate;
+}
+
+.animate-float-slow-delayed {
+  animation: floatSlow 18s ease-in-out 3s infinite alternate;
+}
+
+/* Smooth Scroll Reveal Helpers */
+.reveal-hidden {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Smooth Card Entrance Animation (Slide Up + Fade with Spring Curve) */
+@keyframes smoothCardEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(22px) scale(0.985);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-smooth-enter {
+  animation: smoothCardEnter 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: opacity, transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-smooth-enter {
+    animation: none !important;
+  }
+  .reveal-hidden {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .animate-float-slow,
+  .animate-float-slow-delayed {
+    animation: none !important;
+  }
+}
