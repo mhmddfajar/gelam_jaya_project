@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\LetterTypeController as AdminLetterTypeController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\VillageController as AdminVillageController;
 use App\Http\Controllers\PublicController;
@@ -30,7 +31,12 @@ require __DIR__.'/auth.php';
 
 // Warga Routes (Middleware: auth, role:warga)
 Route::middleware(['auth', 'role:warga'])->prefix('warga')->name('warga.')->group(function () {
+    // Pengajuan Daring Surat (Fase 5)
     Route::get('/pengajuan', [WargaRequestController::class, 'index'])->name('requests.index');
+    Route::get('/pengajuan/baru', [WargaRequestController::class, 'create'])->name('requests.create');
+    Route::post('/pengajuan', [WargaRequestController::class, 'store'])->name('requests.store');
+    Route::get('/pengajuan/{letter_request}', [WargaRequestController::class, 'show'])->name('requests.show');
+    Route::get('/pengajuan/{letter_request}/attachments/{attachment}', [WargaRequestController::class, 'downloadAttachment'])->name('requests.attachments.download');
 
     // Profil / Data Diri (Fase 2)
     Route::get('/profil', [WargaProfileController::class, 'edit'])->name('profile.edit');
@@ -68,6 +74,12 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('pengguna', AdminUserController::class)->names('users');
     Route::patch('/pengguna/{user}/toggle-active', [AdminUserController::class, 'toggleActive'])->name('users.toggle-active');
     Route::post('/pengguna/{user}/reset-password', [AdminUserController::class, 'resetPassword'])->name('users.reset-password');
+
+    // Kelola Master Jenis Surat & Persyaratan (Fase 4)
+    Route::resource('jenis-surat', AdminLetterTypeController::class)
+        ->names('letter-types')
+        ->parameters(['jenis-surat' => 'letter_type']);
+    Route::patch('/jenis-surat/{letter_type}/toggle-active', [AdminLetterTypeController::class, 'toggleActive'])->name('letter-types.toggle-active');
 
     // Info Desa: Identitas & Wilayah (Fase 3)
     Route::get('/desa/identitas-wilayah', [AdminVillageController::class, 'identity'])->name('village.identity');

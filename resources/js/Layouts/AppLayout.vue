@@ -12,7 +12,7 @@ const panelRoute = computed(() => {
   if (!user.value) return '/login';
   if (user.value.role === 'admin') return '/admin/dashboard';
   if (user.value.role === 'staf') return '/staf/penduduk';
-  return '/warga/profil';
+  return '/warga/pengajuan';
 });
 </script>
 
@@ -53,6 +53,15 @@ const panelRoute = computed(() => {
               : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'"
           >
             Beranda
+          </Link>
+          <Link
+            href="/layanan"
+            class="px-3 py-2 rounded-xl transition-all duration-200"
+            :class="$page.url.startsWith('/layanan')
+              ? 'text-teal-700 bg-teal-50/80 font-bold shadow-2xs'
+              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'"
+          >
+            Layanan
           </Link>
           <Link
             href="/profil"
@@ -188,8 +197,21 @@ const panelRoute = computed(() => {
               class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition"
               :class="$page.url === '/' ? 'text-teal-700 bg-teal-50 font-bold' : 'text-slate-700 hover:bg-slate-50'"
             >
-              <span>🏠</span>
+              <svg class="w-4 h-4 text-teal-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+              </svg>
               <span>Beranda</span>
+            </Link>
+            <Link
+              href="/layanan"
+              @click="mobileMenuOpen = false"
+              class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition"
+              :class="$page.url.startsWith('/layanan') ? 'text-teal-700 bg-teal-50 font-bold' : 'text-slate-700 hover:bg-slate-50'"
+            >
+              <svg class="w-4 h-4 text-teal-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <span>Layanan Surat</span>
             </Link>
             <Link
               href="/profil"
@@ -197,7 +219,9 @@ const panelRoute = computed(() => {
               class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition"
               :class="$page.url.startsWith('/profil') ? 'text-teal-700 bg-teal-50 font-bold' : 'text-slate-700 hover:bg-slate-50'"
             >
-              <span>📜</span>
+              <svg class="w-4 h-4 text-teal-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+              </svg>
               <span>Profil Desa</span>
             </Link>
             <Link
@@ -206,7 +230,9 @@ const panelRoute = computed(() => {
               class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition"
               :class="$page.url.startsWith('/potensi') ? 'text-teal-700 bg-teal-50 font-bold' : 'text-slate-700 hover:bg-slate-50'"
             >
-              <span>🌾</span>
+              <svg class="w-4 h-4 text-teal-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              </svg>
               <span>Potensi Unggulan</span>
             </Link>
             <Link
@@ -215,7 +241,9 @@ const panelRoute = computed(() => {
               class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition"
               :class="$page.url.startsWith('/sarana') ? 'text-teal-700 bg-teal-50 font-bold' : 'text-slate-700 hover:bg-slate-50'"
             >
-              <span>🏢</span>
+              <svg class="w-4 h-4 text-teal-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+              </svg>
               <span>Sarana & Prasarana</span>
             </Link>
           </nav>
@@ -292,6 +320,7 @@ const panelRoute = computed(() => {
             <p class="text-xs font-bold text-slate-900 uppercase tracking-wider">Navigasi Publik</p>
             <ul class="text-xs space-y-2 text-slate-500">
               <li><Link href="/" class="hover:text-teal-600 transition">Beranda Utama</Link></li>
+              <li><Link href="/layanan" class="hover:text-teal-600 transition">Panduan Layanan Surat</Link></li>
               <li><Link href="/profil" class="hover:text-teal-600 transition">Profil & Pemerintahan</Link></li>
               <li><Link href="/potensi" class="hover:text-teal-600 transition">Potensi Ekonomi Desa</Link></li>
               <li><Link href="/sarana" class="hover:text-teal-600 transition">Sarana & Prasarana</Link></li>

@@ -221,7 +221,7 @@ class ResidentAndProfileTest extends TestCase
             'hamlet_id' => $this->hamlet->id,
         ]);
 
-        $response->assertRedirect(route('warga.profile.edit'));
+        $response->assertRedirect(route('warga.requests.index'));
         $this->assertAuthenticated();
 
         $resident = Resident::where('nik', '3271018888880001')->first();
@@ -261,7 +261,7 @@ class ResidentAndProfileTest extends TestCase
             'rw' => '001',
         ]);
 
-        $response->assertRedirect(route('warga.profile.edit'));
+        $response->assertRedirect(route('warga.requests.index'));
 
         $user = User::where('email', 'terdata@gelamjaya.test')->first();
         $this->assertEquals($preExistingResident->id, $user->resident_id);

@@ -46,11 +46,11 @@ const todayFormatted = new Intl.DateTimeFormat('id-ID', {
 
     <!-- Sidebar (Clean Soft Light / Modern SaaS Style) -->
     <aside
-      class="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-slate-200/80 transform transition-transform duration-200 ease-in-out md:translate-x-0 md:static md:inset-auto md:shrink-0 flex flex-col shadow-xs"
+      class="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-slate-200/80 transform transition-transform duration-200 ease-in-out md:translate-x-0 md:sticky md:top-0 md:h-screen md:self-start md:shrink-0 md:inset-auto flex flex-col shadow-xs"
       :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
     >
       <!-- Brand Header -->
-      <div class="h-16 flex items-center justify-between px-6 border-b border-slate-100">
+      <div class="h-16 shrink-0 flex items-center justify-between px-6 border-b border-slate-100">
         <div class="flex items-center gap-3">
           <img
             src="/images/logo.webp"
@@ -130,6 +130,19 @@ const todayFormatted = new Intl.DateTimeFormat('id-ID', {
           <span>Data Penduduk</span>
         </Link>
 
+        <Link
+          href="/admin/jenis-surat"
+          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all"
+          :class="$page.url.startsWith('/admin/jenis-surat')
+            ? 'bg-teal-50 text-teal-800 font-semibold border border-teal-200/70 shadow-2xs'
+            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 border border-transparent'"
+        >
+          <svg class="w-5 h-5 text-teal-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <span>Jenis Surat & Syarat</span>
+        </Link>
+
         <div class="pt-4 pb-1 px-3 text-[11px] font-bold tracking-wider text-slate-400 uppercase">
           Info Desa
         </div>
@@ -195,7 +208,7 @@ const todayFormatted = new Intl.DateTimeFormat('id-ID', {
       </nav>
 
       <!-- Sidebar Footer (Profile & Logout) -->
-      <div class="p-4 border-t border-slate-100 bg-slate-50/50 flex items-center justify-between gap-3">
+      <div class="p-4 border-t border-slate-100 bg-slate-50/50 flex items-center justify-between gap-3 shrink-0">
         <div class="flex items-center gap-2.5 min-w-0">
           <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-teal-500 to-cyan-400 text-white font-bold flex items-center justify-center text-xs shrink-0 shadow-xs">
             {{ user?.name ? user.name.charAt(0).toUpperCase() : 'A' }}

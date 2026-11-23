@@ -79,7 +79,7 @@ class AuthAndRoleTest extends TestCase
             'password' => 'password',
         ]);
         $this->assertAuthenticatedAs($this->wargaUser);
-        $responseWarga->assertRedirect(route('warga.profile.edit'));
+        $responseWarga->assertRedirect(route('warga.requests.index'));
     }
 
     public function test_authenticated_user_visiting_home_or_login_is_redirected_by_role(): void
@@ -93,8 +93,8 @@ class AuthAndRoleTest extends TestCase
         $this->actingAs($this->stafUser)->get('/login')->assertRedirect(route('staf.residents.index'));
 
         // Warga visiting / and /login
-        $this->actingAs($this->wargaUser)->get('/')->assertRedirect(route('warga.profile.edit'));
-        $this->actingAs($this->wargaUser)->get('/login')->assertRedirect(route('warga.profile.edit'));
+        $this->actingAs($this->wargaUser)->get('/')->assertRedirect(route('warga.requests.index'));
+        $this->actingAs($this->wargaUser)->get('/login')->assertRedirect(route('warga.requests.index'));
     }
 
     public function test_inactive_user_cannot_login(): void
@@ -226,7 +226,7 @@ class AuthAndRoleTest extends TestCase
             'citizenship' => 'WNI',
         ]);
 
-        $response->assertRedirect(route('warga.profile.edit'));
+        $response->assertRedirect(route('warga.requests.index'));
         $this->assertAuthenticated();
 
         $newUser = User::where('email', 'warga.baru@gelamjaya.test')->first();

@@ -46,11 +46,11 @@ const todayFormatted = new Intl.DateTimeFormat('id-ID', {
 
     <!-- Sidebar (User-Friendly Clean Soft Light Style) -->
     <aside
-      class="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-slate-200/80 transform transition-transform duration-200 ease-in-out md:translate-x-0 md:static md:inset-auto md:shrink-0 flex flex-col shadow-xs"
+      class="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-slate-200/80 transform transition-transform duration-200 ease-in-out md:translate-x-0 md:sticky md:top-0 md:h-screen md:self-start md:shrink-0 md:inset-auto flex flex-col shadow-xs"
       :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
     >
       <!-- Brand Header -->
-      <div class="h-16 flex items-center justify-between px-6 border-b border-slate-100">
+      <div class="h-16 shrink-0 flex items-center justify-between px-6 border-b border-slate-100">
         <div class="flex items-center gap-3">
           <img
             src="/images/logo.webp"
@@ -89,7 +89,9 @@ const todayFormatted = new Intl.DateTimeFormat('id-ID', {
             ? 'bg-emerald-50 text-emerald-800 font-semibold border border-emerald-200/70 shadow-2xs'
             : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 border border-transparent'"
         >
-          <span class="text-base">📑</span>
+          <svg class="w-5 h-5 text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
           <span>Pengajuan Saya</span>
         </Link>
 
@@ -104,7 +106,9 @@ const todayFormatted = new Intl.DateTimeFormat('id-ID', {
             ? 'bg-emerald-50 text-emerald-800 font-semibold border border-emerald-200/70 shadow-2xs'
             : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 border border-transparent'"
         >
-          <span class="text-base">👤</span>
+          <svg class="w-5 h-5 text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
           <span>Data Diri & KTP</span>
         </Link>
 
@@ -115,13 +119,15 @@ const todayFormatted = new Intl.DateTimeFormat('id-ID', {
             ? 'bg-emerald-50 text-emerald-800 font-semibold border border-emerald-200/70 shadow-2xs'
             : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 border border-transparent'"
         >
-          <span class="text-base">🔑</span>
+          <svg class="w-5 h-5 text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+          </svg>
           <span>Ganti Password</span>
         </Link>
       </nav>
 
       <!-- Sidebar Footer (Profile & Logout) -->
-      <div class="p-4 border-t border-slate-100 bg-slate-50/50 flex items-center justify-between gap-3">
+      <div class="p-4 border-t border-slate-100 bg-slate-50/50 flex items-center justify-between gap-3 shrink-0">
         <div class="flex items-center gap-2.5 min-w-0">
           <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-emerald-500 to-teal-400 text-white font-bold flex items-center justify-center text-xs shrink-0 shadow-xs">
             {{ user?.name ? user.name.charAt(0).toUpperCase() : 'W' }}

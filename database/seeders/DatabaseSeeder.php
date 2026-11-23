@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             OfficialSeeder::class,       // Perangkat Desa (Fase 3)
             VillagePotentialSeeder::class,// Potensi Desa (Fase 3)
             FacilitySeeder::class,       // Sarana & Prasarana (Fase 3)
+            LetterTypeSeeder::class,     // Master Jenis Surat & Persyaratan (Fase 4)
         ]);
     }
 }

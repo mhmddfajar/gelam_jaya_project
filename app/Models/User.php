@@ -84,7 +84,7 @@ class User extends Authenticatable
         return match ($this->role) {
             Role::ADMIN => route('admin.dashboard'),
             Role::STAF => route('staf.residents.index'),
-            Role::WARGA => route('warga.profile.edit'),
+            Role::WARGA => route('warga.requests.index'),
             default => route('home'),
         };
     }

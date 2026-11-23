@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Facility;
 use App\Models\Hamlet;
+use App\Models\LetterType;
 use App\Models\Official;
 use App\Models\Resident;
 use App\Models\VillagePotential;
@@ -113,9 +114,11 @@ class PublicController extends Controller
     public function services(): Response
     {
         $profile = VillageProfile::current();
+        $letterTypes = LetterType::active()->orderBy('name')->get();
 
         return Inertia::render('Public/Services', [
             'profile' => $profile,
+            'letterTypes' => $letterTypes,
         ]);
     }
 }

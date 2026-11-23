@@ -46,11 +46,11 @@ const todayFormatted = new Intl.DateTimeFormat('id-ID', {
 
     <!-- Sidebar (Modern SaaS / Clean Soft Light Style) -->
     <aside
-      class="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-slate-200/80 transform transition-transform duration-200 ease-in-out md:translate-x-0 md:static md:inset-auto md:shrink-0 flex flex-col shadow-xs"
+      class="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-slate-200/80 transform transition-transform duration-200 ease-in-out md:translate-x-0 md:sticky md:top-0 md:h-screen md:self-start md:shrink-0 md:inset-auto flex flex-col shadow-xs"
       :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
     >
       <!-- Brand Header -->
-      <div class="h-16 flex items-center justify-between px-6 border-b border-slate-100">
+      <div class="h-16 shrink-0 flex items-center justify-between px-6 border-b border-slate-100">
         <div class="flex items-center gap-3">
           <img
             src="/images/logo.webp"
@@ -147,7 +147,7 @@ const todayFormatted = new Intl.DateTimeFormat('id-ID', {
       </nav>
 
       <!-- Sidebar Footer (Profile & Logout) -->
-      <div class="p-4 border-t border-slate-100 bg-slate-50/50 flex items-center justify-between gap-3">
+      <div class="p-4 border-t border-slate-100 bg-slate-50/50 flex items-center justify-between gap-3 shrink-0">
         <div class="flex items-center gap-2.5 min-w-0">
           <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-teal-500 to-cyan-400 text-white font-bold flex items-center justify-center text-xs shrink-0 shadow-xs">
             {{ user?.name ? user.name.charAt(0).toUpperCase() : 'S' }}
