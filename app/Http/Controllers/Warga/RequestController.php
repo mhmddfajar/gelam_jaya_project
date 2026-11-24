@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Warga;
 use App\Enums\Channel;
 use App\Enums\RequestStatus;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Warga\ResubmitLetterRequest;
 use App\Http\Requests\Warga\StoreLetterRequest;
 use App\Models\LetterRequest;
 use App\Models\LetterType;
 use App\Models\RequestAttachment;
 use App\Models\RequestStatusLog;
 use App\Services\RegistrationNumberService;
+use App\Services\RequestStatusService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -181,6 +183,76 @@ class RequestController extends Controller
         return Inertia::render('Warga/Requests/Show', [
             'letterRequest' => $letter_request,
         ]);
+    }
+
+    /**
+     * Resubmit a letter request that was requested for revision (perlu_perbaikan).
+     */
+    public function resubmit(
+        ResubmitLetterRequest $request,
+        LetterRequest $letter_request,
+        RequestStatusService $statusService
+    ): RedirectResponse {
+        DB::transaction(function () use ($request, $letter_request, $statusService) {
+            $letter_request->purpose = trim($request->input('purpose'));
+            $letter_request->form_data = $request->input('form_data', []);
+            $letter_request->save();
+
+            // Process any newly uploaded attachments
+            if ($request->hasFile('attachments')) {
+                $files = $request->file('attachments');
+                $letterType = $letter_request->letterType()->with('typeRequirements')->first();
+                $requirementsMap = $letterType ? $letterType->typeRequirements->keyBy('id') : collect();
+
+                foreach ($files as $key => $file) {
+                    if (!$file || !$file->isValid()) {
+                        continue;
+                    }
+
+                    $requirementId = null;
+                    if (is_numeric($key) && isset($requirementsMap[$key])) {
+                        $requirementId = (int) $key;
+                    }
+
+                    // If replacing existing requirement attachment, clean old file
+                    if ($requirementId) {
+                        $existing = RequestAttachment::where('letter_request_id', $letter_request->id)
+                            ->where('requirement_id', $requirementId)
+                            ->first();
+
+                        if ($existing) {
+                            if (Storage::disk('local')->exists($existing->file_path)) {
+                                Storage::disk('local')->delete($existing->file_path);
+                            }
+                            $existing->delete();
+                        }
+                    }
+
+                    $storedPath = $file->store("attachments/{$letter_request->id}", 'local');
+                    $sizeKb = (int) round($file->getSize() / 1024);
+
+                    RequestAttachment::create([
+                        'letter_request_id' => $letter_request->id,
+                        'requirement_id' => $requirementId,
+                        'file_path' => $storedPath,
+                        'original_name' => $file->getClientOriginalName(),
+                        'mime_type' => $file->getClientMimeType() ?: 'application/octet-stream',
+                        'size_kb' => max(1, $sizeKb),
+                    ]);
+                }
+            }
+
+            // Transition status back to DIAJUKAN
+            $statusService->transition(
+                $letter_request,
+                RequestStatus::DIAJUKAN,
+                $request->user(),
+                'Pengajuan telah diperbaiki dan diajukan ulang oleh pemohon.'
+            );
+        });
+
+        return redirect()->route('warga.requests.show', $letter_request->id)
+            ->with('success', 'Pengajuan surat berhasil diperbaiki dan diajukan kembali.');
     }
 
     /**

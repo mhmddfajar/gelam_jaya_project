@@ -85,12 +85,23 @@ const todayFormatted = new Intl.DateTimeFormat('id-ID', {
         <Link
           href="/staf/pengajuan"
           class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all"
-          :class="$page.url.startsWith('/staf/pengajuan')
+          :class="($page.url === '/staf/pengajuan' || ($page.url.startsWith('/staf/pengajuan') && !$page.url.startsWith('/staf/pengajuan/baru')))
             ? 'bg-teal-50 text-teal-800 font-semibold border border-teal-200/70 shadow-2xs'
             : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 border border-transparent'"
         >
           <span class="text-base">📄</span>
           <span>Antrean Pengajuan</span>
+        </Link>
+
+        <Link
+          href="/staf/pengajuan/baru"
+          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all"
+          :class="$page.url.startsWith('/staf/pengajuan/baru')
+            ? 'bg-teal-50 text-teal-800 font-semibold border border-teal-200/70 shadow-2xs'
+            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 border border-transparent'"
+        >
+          <span class="text-base">✍️</span>
+          <span>Input Layanan Luring</span>
         </Link>
 
         <Link

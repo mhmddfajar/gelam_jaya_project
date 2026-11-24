@@ -1,6 +1,6 @@
 <script setup>
-import { computed } from 'vue';
-import { Head, Link } from '@inertiajs/vue3';
+import { ref, computed } from 'vue';
+import { Head, Link, useForm } from '@inertiajs/vue3';
 import WargaLayout from '@/Layouts/WargaLayout.vue';
 import StatusBadge from '@/Components/StatusBadge.vue';
 
@@ -40,6 +40,33 @@ const currentStepIndex = computed(() => {
   if (currentKey === 'perlu_perbaikan') return 0;
   return statusSteps.findIndex(s => s.key === currentKey);
 });
+
+// Form Resubmit saat status perlu_perbaikan
+const resubmitForm = useForm({
+  purpose: req.value.purpose || '',
+  form_data: { ...(req.value.form_data || {}) },
+  attachments: {},
+});
+
+const formFields = computed(() => {
+  return req.value.letter_type?.form_fields || req.value.letter_type?.form_schema || [];
+});
+
+const handleResubmitFileChange = (reqId, event) => {
+  const file = event.target.files[0];
+  if (file) {
+    resubmitForm.attachments[reqId] = file;
+  } else {
+    delete resubmitForm.attachments[reqId];
+  }
+};
+
+const submitResubmit = () => {
+  resubmitForm.post(`/warga/pengajuan/${req.value.id}/resubmit`, {
+    forceFormData: true,
+    preserveScroll: true,
+  });
+};
 </script>
 
 <template>
@@ -83,20 +110,137 @@ const currentStepIndex = computed(() => {
       </div>
 
       <!-- Alert Callouts for Actionable States -->
-      <!-- State 1: Perlu Perbaikan -->
+      <!-- State 1: Perlu Perbaikan Alert & Revision Form -->
       <div
         v-if="(req.status?.value || req.status) === 'perlu_perbaikan'"
-        class="p-4 sm:p-5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 space-y-2 animate-fade-in"
+        class="space-y-4 animate-fade-in"
       >
-        <div class="flex items-center gap-2 font-bold text-sm text-amber-800">
-          <svg class="w-5 h-5 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-          </svg>
-          <span>Pengajuan Memerlukan Perbaikan Berkas</span>
+        <div class="p-4 sm:p-5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 space-y-2">
+          <div class="flex items-center gap-2 font-bold text-sm text-amber-800">
+            <svg class="w-5 h-5 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <span>Pengajuan Memerlukan Perbaikan</span>
+          </div>
+          <p class="text-xs sm:text-sm text-amber-800 leading-relaxed">
+            Catatan Petugas: <em>"{{ req.status_note || 'Mohon periksa kembali berkas lampiran atau data yang diajukan.' }}"</em>
+          </p>
         </div>
-        <p class="text-xs sm:text-sm text-amber-800 leading-relaxed">
-          Catatan Petugas: <em>"{{ req.status_note || 'Mohon periksa kembali berkas lampiran yang diunggah.' }}"</em>
-        </p>
+
+        <!-- Form Resubmit / Perbaikan Berkas -->
+        <div class="bg-white rounded-2xl p-6 border border-amber-300/80 shadow-xs space-y-4">
+          <div class="border-b border-slate-100 pb-3">
+            <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+              <span class="text-amber-500">✍️</span>
+              <span>Formulir Perbaikan dan Pengajuan Ulang</span>
+            </h2>
+            <p class="text-xs text-slate-500 mt-0.5">
+              Perbarui keperluan, isian data khusus, atau unggah ulang dokumen persyaratan sesuai catatan petugas di atas.
+            </p>
+          </div>
+
+          <form @submit.prevent="submitResubmit" class="space-y-4 text-xs">
+            <!-- Edit Purpose -->
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">
+                Keperluan Pengajuan Surat <span class="text-rose-500">*</span>:
+              </label>
+              <textarea
+                v-model="resubmitForm.purpose"
+                rows="2"
+                class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
+                :class="{ 'border-rose-300': resubmitForm.errors.purpose }"
+              ></textarea>
+              <p v-if="resubmitForm.errors.purpose" class="text-rose-600 mt-1">{{ resubmitForm.errors.purpose }}</p>
+            </div>
+
+            <!-- Edit Dynamic Form Fields if available -->
+            <div v-if="formFields.length > 0" class="space-y-3 pt-2 border-t border-slate-100">
+              <h3 class="font-bold text-slate-800 text-xs">Isian Rincian Formulir Khusus:</h3>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div
+                  v-for="field in formFields"
+                  :key="field.name || field.key"
+                  class="space-y-1"
+                >
+                  <label class="block font-bold text-slate-700 text-[11px]">
+                    {{ field.label || field.name || field.key }}
+                    <span v-if="field.required" class="text-rose-500">*</span>
+                  </label>
+                  <input
+                    v-if="field.type === 'text' || field.type === 'number' || field.type === 'date'"
+                    v-model="resubmitForm.form_data[field.name || field.key]"
+                    :type="field.type"
+                    class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 text-xs"
+                  />
+                  <textarea
+                    v-else-if="field.type === 'textarea'"
+                    v-model="resubmitForm.form_data[field.name || field.key]"
+                    rows="2"
+                    class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 text-xs"
+                  ></textarea>
+                  <select
+                    v-else-if="field.type === 'select'"
+                    v-model="resubmitForm.form_data[field.name || field.key]"
+                    class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white text-xs"
+                  >
+                    <option value="">-- Pilih --</option>
+                    <option v-for="opt in (field.options || [])" :key="opt" :value="opt">{{ opt }}</option>
+                  </select>
+                  <p
+                    v-if="resubmitForm.errors[`form_data.${field.name || field.key}`]"
+                    class="text-rose-600 text-[11px] mt-1"
+                  >
+                    {{ resubmitForm.errors[`form_data.${field.name || field.key}`] }}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Upload Replacement Attachments -->
+            <div v-if="req.letter_type?.type_requirements?.length > 0" class="space-y-3 pt-2 border-t border-slate-100">
+              <h3 class="font-bold text-slate-800 text-xs">Unggah Ulang Dokumen Persyaratan:</h3>
+              <div class="space-y-2.5">
+                <div
+                  v-for="treq in req.letter_type.type_requirements"
+                  :key="treq.id"
+                  class="p-3 rounded-xl bg-slate-50 border border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2"
+                >
+                  <div>
+                    <span class="font-bold text-slate-800 block text-xs">
+                      {{ treq.name }}
+                      <span v-if="treq.is_required" class="text-rose-500">*</span>
+                    </span>
+                    <span class="text-[10px] text-slate-400 block">
+                      Unggah berkas baru jika ingin mengganti lampiran sebelumnya (JPG, PNG, PDF maks. 2MB).
+                    </span>
+                  </div>
+
+                  <div>
+                    <input
+                      type="file"
+                      accept=".jpg,.jpeg,.png,.pdf"
+                      @change="handleResubmitFileChange(treq.id, $event)"
+                      class="text-xs text-slate-500 file:mr-2 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:text-[11px] file:font-semibold file:bg-amber-100 file:text-amber-800 hover:file:bg-amber-200 cursor-pointer"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Submit Resubmit Button -->
+            <div class="pt-2 flex justify-end">
+              <button
+                type="submit"
+                :disabled="resubmitForm.processing"
+                class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow-sm hover:shadow transition disabled:opacity-50"
+              >
+                <span v-if="resubmitForm.processing">Mengirim Ulang...</span>
+                <span v-else>Kirim Ulang Pengajuan ke Petugas</span>
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
 
       <!-- State 2: Siap Diambil -->

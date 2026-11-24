@@ -31,11 +31,12 @@ require __DIR__.'/auth.php';
 
 // Warga Routes (Middleware: auth, role:warga)
 Route::middleware(['auth', 'role:warga'])->prefix('warga')->name('warga.')->group(function () {
-    // Pengajuan Daring Surat (Fase 5)
+    // Pengajuan Daring Surat (Fase 5 & Fase 6)
     Route::get('/pengajuan', [WargaRequestController::class, 'index'])->name('requests.index');
     Route::get('/pengajuan/baru', [WargaRequestController::class, 'create'])->name('requests.create');
     Route::post('/pengajuan', [WargaRequestController::class, 'store'])->name('requests.store');
     Route::get('/pengajuan/{letter_request}', [WargaRequestController::class, 'show'])->name('requests.show');
+    Route::post('/pengajuan/{letter_request}/resubmit', [WargaRequestController::class, 'resubmit'])->name('requests.resubmit');
     Route::get('/pengajuan/{letter_request}/attachments/{attachment}', [WargaRequestController::class, 'downloadAttachment'])->name('requests.attachments.download');
 
     // Profil / Data Diri (Fase 2)
@@ -45,7 +46,13 @@ Route::middleware(['auth', 'role:warga'])->prefix('warga')->name('warga.')->grou
 
 // Staf & Admin Routes (Middleware: auth, role:staf,admin)
 Route::middleware(['auth', 'role:staf,admin'])->prefix('staf')->name('staf.')->group(function () {
+    // Pengajuan Surat: Antrean & Luring (Fase 6)
     Route::get('/pengajuan', [StafRequestController::class, 'index'])->name('requests.index');
+    Route::get('/pengajuan/baru', [StafRequestController::class, 'create'])->name('requests.create');
+    Route::post('/pengajuan', [StafRequestController::class, 'store'])->name('requests.store');
+    Route::get('/pengajuan/{letter_request}', [StafRequestController::class, 'show'])->name('requests.show');
+    Route::post('/pengajuan/{letter_request}/status', [StafRequestController::class, 'updateStatus'])->name('requests.status');
+    Route::get('/attachments/{attachment}/download', [StafRequestController::class, 'downloadAttachment'])->name('attachments.download');
 
     // Data Penduduk CRUD (Fase 2)
     Route::get('/penduduk', [StafResidentController::class, 'index'])->name('residents.index');
